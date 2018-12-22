@@ -1,0 +1,184 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>无标题文档</title>
+    <script src="static/js/jquery-1.7.2.js"></script>
+</head>
+
+<body>
+<div>
+    <h1>新增</h1>
+    辖区：<input type="text" id="xiaqu"/>
+    <br />
+    姓名：<input type="text" id="name" />
+    <br />
+    性别：<input type="text" id="sex" />
+    <br />
+    证件：<input type="text" id="zhengjian" />
+    <br />
+    电话：<input type="text" id="tel" />
+    <br />
+    住址：<input type="text" id="zhuzhi" />
+    <br />
+    <input type="submit" id="tj" value="添加" />
+</div>
+<div>
+    <h1>信息</h1>
+    <table width="100%" border="1px" cellspacing="0" cellspacing="0">
+        <tr>
+            <td>辖区</td>
+            <td>姓名</td>
+            <td>性别</td>
+            <td>证件</td>
+            <td>电话</td>
+            <td>住址</td>
+            <td>操作</td>
+        </tr>
+
+        <tbody id="aa1">
+        </tbody>
+    </table>
+    <div style="border-left:2px solid #444; border-bottom:#444 2px solid; border-right:2px solid #444;
+     text-align:center; display:none;color:red" id="ts">没有更多信息！！</div>
+</div>
+<div id="xgnr">
+
+</div>
+</body>
+</html>
+<script type="text/jscript">
+
+jia();
+//添加信息
+$("#tj").click(function(){
+
+    var xq = $("#xiaqu").val();
+    var name = $("#name").val();
+    var sex = $("#sex").val();
+    var zj = $("#zhengjian").val();
+    var tel = $("#tel").val();
+    var zz = $("#zhuzhi").val();
+
+
+    $.ajax({
+    url:"add.php",
+    data:{xq:xq,name:name,sex:sex,zj:zj,tel:tel,zz:zz},
+    type:"POST",
+    dataType:"text",
+    success:function(data){
+                if(data=="1"){
+                    //alert("添加成功");
+                    window.location.href="test.php";
+                }else{
+                    alert("");
+                }
+
+            }
+    })
+}) //添加结束
+
+//大方法
+function jia(){
+//显示信息
+$.ajax({
+url:"cha.php",
+type:"POST",
+dataType:"text",
+success: function(data){
+        var str = "";
+        if(data=="111"){
+            $("#ts").css("display","block");
+        }else{
+        var hang = data.split("|");
+        for(var i=0;i&lt;hang.length;i++) {
+            var lie = hang[i].split("^");
+            str += "&lt;tr>&lt;td>"+lie[1]+"&lt;/td>&lt;td>"+lie[2]+"&lt;/td>&lt;td>"+lie[3]+"
+            &lt;/td>&lt;td>"+lie[4]+"&lt;/td>&lt;td>"+lie[5]+"&lt;/td>&lt;td>"+lie[6]+"&lt;/td>&lt;td>&lt;
+            span class='sc1' bs='"+lie[0]+"'>删除&lt;/span>&nbsp;
+            &nbsp;&nbsp;&lt;span class='xg1' bs='"+lie[0]+"'>修改&lt;/span>&lt;/td>&lt;/tr>";
+        }
+        $("#aa1").html(str);
+
+//删除信息
+$(".sc1").click(function(){
+var code = $(this).attr("bs")
+if(confirm('确定删除么'))
+{
+$.ajax({
+        url:"shanchu.php",
+        data:{a:code},
+        type:"POST",
+        dataType:"text",
+        success:function(data){
+            if(data=="1")
+            {
+                //alert("删除成功")
+                window.location.href="test.php";
+            }
+            else
+            {
+                alert("删除失败")
+
+            }
+
+        }
+    })
+}
+})
+
+//查询修改的信息
+$(".xg1").click(function(){
+var code = $(this).attr("bs")
+$.ajax({
+    url:"xiugai.php",
+    data:{a:code},
+    type:"POST",
+    dataType:"text",
+    success:function(data){
+        var str = "";
+        var hang = data.split("|");
+
+        for(var i=0;i&lt;hang.length;i++)
+        {
+            var lie = hang[i].split("^");
+
+            str += "&lt;h1>修改&lt;/h1>&lt;input type='hidden' id='yc' value='"+lie[0]+"' />辖区：&lt;input type='text' id='xiaqu1' value='"+lie[1]+"'/>&lt;br />姓名：&lt;input type='text' id='name1' value='"+lie[2]+"'/>&lt;br />性别：&lt;input type='text' id='sex1' value='"+lie[3]+"'/>&lt;br />    证件：&lt;input type='text' id='zhengjian1' value='"+lie[4]+"'/>&lt;br />    电话：&lt;input type='text' id='tel1' value='"+lie[5]+"'/>&lt;br />住址：&lt;input type='text' id='zhuzhi1'  value='"+lie[6]+"'/>&lt;br />&lt;input type='submit' id='xiugai' value='修改' />";
+        }
+        $("#xgnr").html(str);
+//修改信息
+$("#xiugai").click(function(){
+var yc1 = $("#yc").val();
+var xq1 = $("#xiaqu1").val();
+var name1 = $("#name1").val();
+var sex1 = $("#sex1").val();
+var zj1 = $("#zhengjian1").val();
+var tel1 = $("#tel1").val();
+var zz1 = $("#zhuzhi1").val();
+$.ajax({
+url:"xiugaichuli.php",
+data:{yc:yc1,xq:xq1,name:name1,sex:sex1,zj:zj1,tel:tel1,zz:zz1},
+type:"POST",
+dataType:"text",
+success:function(data){
+        if(data=="1")
+        {
+            //alert("添加成功");
+            window.location.href="test.php";
+        }
+        else
+        {
+            alert("11");
+        }
+      }
+    })
+  })
+
+}
+})
+})
+}
+}
+})
+}
+</script>

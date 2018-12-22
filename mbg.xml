@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+
+    <context id="DB2Tables" targetRuntime="MyBatis3">
+
+        <commentGenerator>
+            <property name="suppressDate" value="true"/>
+            <property name="suppressAllComments" value="true" />
+        </commentGenerator>
+
+
+        <!--连接数据库相关-->
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://localhost:3306/two"
+                        userId="root"
+                        password="123456">
+        </jdbcConnection>
+
+        <javaTypeResolver >
+            <property name="forceBigDecimals" value="false" />
+        </javaTypeResolver>
+
+        <!--指定生成javaBean的位置-->
+        <javaModelGenerator
+                targetPackage="cn.kgc.bean"
+                targetProject=".\src\main\java"><!--点：表示当前项目-->
+            <property name="enableSubPackages" value="true" />
+            <property name="trimStrings" value="true" />
+        </javaModelGenerator>
+            <!--指定映射文件生成的位置-->
+        <sqlMapGenerator
+                targetPackage="mapper"
+                targetProject=".\src\main\resource">
+            <property name="enableSubPackages" value="true" />
+        </sqlMapGenerator>
+
+        <!--生成的dao指定位置-->
+        <javaClientGenerator type="XMLMAPPER"
+                             targetPackage="cn.kgc.mapper"
+                             targetProject=".\src\main\java">
+            <property name="enableSubPackages" value="true" />
+        </javaClientGenerator>
+
+        <!--生成表策略-->
+        <table tableName="news_detail" domainObjectName="NewsDetail"/>
+        <table tableName="news_comment" domainObjectName="NewsComment"/>
+
+    </context>
+</generatorConfiguration>
